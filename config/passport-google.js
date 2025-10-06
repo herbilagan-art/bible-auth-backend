@@ -5,7 +5,7 @@ const User = require("../models/user");
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "/auth/google/callback"
+  callbackURL: "https://bible-auth-backend.onrender.com/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   console.log("🔍 Google profile received:", {
     id: profile.id,
