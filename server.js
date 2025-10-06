@@ -15,6 +15,13 @@ const bookmarksRoutes = require('./routes/bookmarks');
 
 const app = express();
 
+try {
+  require("jsonwebtoken");
+  console.log("✅ jsonwebtoken module loaded");
+} catch (err) {
+  console.error("❌ jsonwebtoken failed to load:", err);
+}
+
 // Middleware
 app.use(express.json());
 
