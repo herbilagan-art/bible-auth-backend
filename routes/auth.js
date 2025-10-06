@@ -20,7 +20,11 @@ router.get("/facebook/callback", passport.authenticate("facebook", {
 });
 
 // Google Login
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
+);
 
 router.get("/google/callback", passport.authenticate("google", {
   failureRedirect: "/auth/failure",
