@@ -11,6 +11,10 @@ router.get("/facebook/callback", passport.authenticate("facebook", {
   failureRedirect: "/auth/failure",
   session: false
 }), (req, res) => {
+  console.log("🔍 Facebook callback user:", req.user);
+  if (!req.user) {
+    return res.status(500).json({ message: "❌ No user returned from Facebook strategy" });
+  }
   const token = generateToken(req.user._id);
   res.json({ message: "✅ Facebook login successful", token });
 });
@@ -22,6 +26,10 @@ router.get("/google/callback", passport.authenticate("google", {
   failureRedirect: "/auth/failure",
   session: false
 }), (req, res) => {
+  console.log("🔍 Google callback user:", req.user);
+  if (!req.user) {
+    return res.status(500).json({ message: "❌ No user returned from Google strategy" });
+  }
   const token = generateToken(req.user._id);
   res.json({ message: "✅ Google login successful", token });
 });
