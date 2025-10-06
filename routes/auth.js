@@ -3,7 +3,7 @@ const passport = require("passport");
 const { generateToken } = require("../utils/jwt");
 const { OAuth2Client } = require("google-auth-library");
 const fetch = require("node-fetch");
-const User = require("../models/User"); // adjust path/model name as needed
+const User = require("../models/user"); // adjust path/model name as needed
 
 const router = express.Router();
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
