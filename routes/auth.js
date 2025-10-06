@@ -5,21 +5,42 @@ const { generateToken } = require("../utils/jwt");
 const router = express.Router();
 
 // Facebook Login
-router.get("/facebook", passport.authenticate("facebook"));
+router.get("/facebook",
+  passport.authenticate("facebook", {
+    scope: ["email"]
+  })
+);
+router.get("/facebook/callback",
+  passport.authenticate("facebook", {
+    failureRedirect: "/auth/failure",
+    session: false
+  }),
+  (req, res) => {
+    console.log("🔍 Facebook callback triggered");
+    console.log("🔍 Passport returned user:", req.user);
 
-router.get("/facebook/callback", passport.authenticate("facebook", {
-  failureRedirect: "/auth/failure",
-  session: false
-}), (req, res) => {
-  console.log("🔍 Facebook callback user:", req.user);
-  if (!req.user) {
-    return res.status(500).json({ message: "❌ No user returned from Facebook strategy" });
+    if (!req.user || !req.user._id) {
+      console.warn("⚠️ Missing user or user._id in Facebook callback");
+      return res.status(500).json({ message: "❌ No valid user returned from Facebook strategy" });
+    }
+
+    try {
+      const token = generateToken(req.user._id);
+      console.log("✅ JWT generated:", token);
+      res.json({ message: "✅ Facebook login successful", token });
+    } catch (err) {
+      console.error("❌ Error generating JWT:", err);
+      res.status(500).json({ message: "❌ Failed to generate token", error: err.message });
+    }
   }
-  const token = generateToken(req.user._id);
-  res.json({ message: "✅ Facebook login successful", token });
-});
+);
 
 // Google Login
+router.get("/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
+);
 router.get("/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/failure",
