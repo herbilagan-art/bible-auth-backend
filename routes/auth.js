@@ -36,11 +36,13 @@ router.get("/facebook/callback",
 );
 
 // Google Login
-router.get("/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"]
-  })
-);
+router.get("/google", (req, res, next) => {
+  console.log("🔍 Google login route hit");
+  next();
+}, passport.authenticate("google", {
+  scope: ["profile", "email"]
+}));
+
 router.get("/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/failure",
